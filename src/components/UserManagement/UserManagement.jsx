@@ -4,8 +4,7 @@ import { Box, Button, Typography } from '@mui/material';
 
 const styles = {
   container: {
-    position: 'relative', // Make sure the container can hold the background image
-    // backgroundColor: '#f4f4f4',
+    position: 'relative',
     height: '100vh',
     width: '100vw',
     display: 'flex',
@@ -14,6 +13,9 @@ const styles = {
     alignItems: 'center',
     textAlign: 'center',
     overflow: 'hidden',
+    "@media (max-width: 600px)": {
+      padding: "1rem", 
+    },
   },
   backgroundImage: {
     position: 'absolute',
@@ -22,8 +24,8 @@ const styles = {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
-    opacity: 0.2, // Adjust opacity as needed
-    zIndex: -1, // Ensure the background stays behind the content
+    opacity: 0.2,
+    zIndex: -1,
   },
   button: {
     backgroundColor: '#352b66',
@@ -33,6 +35,19 @@ const styles = {
     color: '#fff',
     margin: '1rem',
     '&:hover': { backgroundColor: '#392a85' },
+    "@media (max-width: 600px)": {
+      padding: '0.8rem 1.5rem', 
+      fontSize: '1rem', 
+    },
+  },
+  title: {
+    marginBottom: '2rem',
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: '2rem', 
+    "@media (max-width: 600px)": {
+      fontSize: '1.5rem', 
+    },
   },
 };
 
@@ -49,7 +64,7 @@ const UserManagement = () => {
         sx={styles.backgroundImage}
       />
       
-      <Typography variant="h4" sx={{ marginBottom: '2rem', color: '#fff', fontWeight: 'bold' }}>
+      <Typography variant="h4" sx={styles.title}>
         User Management System
       </Typography>
       <Button sx={styles.button} onClick={() => navigate('/register')}>

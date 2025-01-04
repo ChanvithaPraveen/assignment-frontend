@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import UserManagement from '../components/UserManagement';
@@ -35,7 +35,7 @@ test('renders user management form', () => {
   expect(screen.getByRole('button', { name: /create/i })).toBeInTheDocument();
 });
 
-test('creates a new user', () => {
+test('creates a new user', async () => {
   render(
     <Provider store={store}>
       <UserManagement />
@@ -46,10 +46,12 @@ test('creates a new user', () => {
   userEvent.type(screen.getByPlaceholderText(/last name/i), 'Doe');
   userEvent.click(screen.getByRole('button', { name: /create/i }));
 
-  expect(screen.getByText('John Doe')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+  });
 });
 
-test('updates a user', () => {
+test('updates a user', async () => {
   render(
     <Provider store={store}>
       <UserManagement />
@@ -61,13 +63,16 @@ test('updates a user', () => {
 
   // Now update the user
   userEvent.click(screen.getByText('Edit'));
+  userEvent.clear(screen.getByPlaceholderText(/first name/i)); // Clear the existing name
   userEvent.type(screen.getByPlaceholderText(/first name/i), 'Jane');
   userEvent.click(screen.getByRole('button', { name: /update/i }));
 
-  expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+  });
 });
 
-test('deletes a user', () => {
+test('deletes a user', async () => {
   render(
     <Provider store={store}>
       <UserManagement />
@@ -79,5 +84,7 @@ test('deletes a user', () => {
 
   userEvent.click(screen.getByText('Delete'));
 
-  expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+  });
 });

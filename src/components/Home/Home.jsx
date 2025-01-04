@@ -1,48 +1,67 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { logout } from '../../features/authSlice';
-import { Box, Typography, Button, Avatar } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/authSlice";
+import { Box, Typography, Button, Avatar } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
 
 const styles = {
   container: {
-    height: '100vh',
-    width: '100vw',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    backgroundColor: '#f4f4f9',
-    textAlign: 'center',
+    height: "100vh",
+    width: "100vw",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    backgroundColor: "#f4f4f9",
+    textAlign: "center",
+    padding: "1rem",
+    "@media (max-width: 600px)": {
+      padding: "0rem",
+    },
   },
   avatar: {
-    bgcolor: '#352b66',
+    bgcolor: "#352b66",
     width: 100,
     height: 100,
-    marginBottom: '1rem',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginBottom: "1rem",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    "@media (max-width: 600px)": {
+      width: 80,
+      height: 80,
+    },
   },
   welcomeText: {
-    color: '#352b66',
-    fontWeight: 'bold',
-    marginBottom: '1rem',
-    fontSize: '2rem',
+    color: "#352b66",
+    fontWeight: "bold",
+    marginBottom: "1rem",
+    fontSize: "2rem",
+    "@media (max-width: 600px)": {
+      fontSize: "1.5rem",
+    },
   },
   profileText: {
-    color: '#666',
-    fontSize: '1rem',
-    marginBottom: '2rem',
+    color: "#666",
+    fontSize: "1rem",
+    marginBottom: "2rem",
+    "@media (max-width: 600px)": {
+      fontSize: "0.9rem",
+      marginBottom: "1.5rem",
+    },
   },
   logoutButton: {
-    backgroundColor: '#352b66',
-    color: '#fff',
-    padding: '0.7rem 1.5rem',
-    fontWeight: 'bold',
-    '&:hover': {
-      backgroundColor: '#392a85',
+    backgroundColor: "#352b66",
+    color: "#fff",
+    padding: "0.7rem 1.5rem",
+    fontWeight: "bold",
+    "&:hover": {
+      backgroundColor: "#392a85",
+    },
+    "@media (max-width: 600px)": {
+      padding: "0.6rem 1.2rem",
+      fontSize: "0.9rem",
     },
   },
 };
@@ -54,20 +73,20 @@ const Home = () => {
 
   useEffect(() => {
     // Fetch user data from localStorage
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     } else {
-      navigate('/');
+      navigate("/");
     }
   }, [navigate]);
 
   const handleLogout = () => {
     // Clear localStorage and dispatch logout action
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     dispatch(logout());
-    navigate('/');
+    navigate("/");
   };
 
   return (

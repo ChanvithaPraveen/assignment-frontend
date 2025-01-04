@@ -23,6 +23,9 @@ const styles = {
     width: '100vw',
     display: 'flex',
     position: 'relative',
+    "@media (max-width: 600px)": {
+      padding: '1rem',
+    },
   },
   backgroundImage: {
     position: 'absolute',
@@ -43,31 +46,46 @@ const styles = {
     alignItems: 'center',
     paddingTop: '3rem',
     paddingBottom: '3rem',
+    "@media (max-width: 600px)": {
+      paddingTop: '2rem',
+      paddingBottom: '2rem',
+    },
   },
   table: {
     width: '80%',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Semi-transparent background for the table
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
     padding: '1rem',
     borderRadius: '10px',
     opacity: 0.9,
+    "@media (max-width: 600px)": {
+      width: '100%', // Make table take full width on small screens
+    },
   },
   button: {
     backgroundColor: '#352b66',
     color: '#fff',
     marginRight: '1rem',
     '&:hover': { backgroundColor: '#392a85' },
+    "@media (max-width: 600px)": {
+      padding: '0.5rem 1rem', // Adjust button size for mobile
+      fontSize: '0.9rem', // Adjust font size for mobile
+    },
   },
   title: {
     color: 'rgba(255, 255, 255, 0.7)',
     fontWeight: 'bold',
     marginBottom: '1rem',
+    fontSize: '2rem', // Larger font size for desktop
+    "@media (max-width: 600px)": {
+      fontSize: '1.5rem', // Smaller font size for mobile
+    },
   },
 };
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null); // Store the user to be deleted
+  const [userToDelete, setUserToDelete] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -103,10 +121,10 @@ const Users = () => {
         },
       });
       setUsers(users.filter((user) => user._id !== userToDelete._id));
-      setOpenDialog(false); // Close the dialog after successful deletion
+      setOpenDialog(false);
     } catch (error) {
       console.error('Error deleting user:', error);
-      setOpenDialog(false); // Close the dialog in case of error as well
+      setOpenDialog(false);
     }
   };
 
@@ -117,7 +135,7 @@ const Users = () => {
 
   const openConfirmationDialog = (user) => {
     setUserToDelete(user);
-    setOpenDialog(true); // Open the dialog with the user's information
+    setOpenDialog(true);
   };
 
   return (
@@ -160,7 +178,7 @@ const Users = () => {
                     <Button
                       variant="contained"
                       color="error"
-                      onClick={() => openConfirmationDialog(user)} // Open dialog for confirmation
+                      onClick={() => openConfirmationDialog(user)}
                     >
                       Delete
                     </Button>
