@@ -19,41 +19,57 @@ import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import axios for API calls
 
 const Register = () => {
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().min(3, "Name must be at least 3 characters").required("Name is required"),
+      firstName: Yup.string().min(3, "First Name must be at least 3 characters").required("First Name is required"),
+      lastName: Yup.string().min(3, "Last Name must be at least 3 characters").required("Last Name is required"),
+      username: Yup.string().min(3, "Username must be at least 3 characters").required("Username is required"),
       email: Yup.string().email("Invalid email address").required("Email is required"),
       password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Confirm password is required"),
     }),
-    onSubmit: (values) => {
-      // Save user data to local storage
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      users.push(values);
-      localStorage.setItem("users", JSON.stringify(users));
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.post("http://localhost:5000/api/users/register", {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          username: values.username,
+          email: values.email,
+          password: values.password,
+        });
 
-      // Show success toast
-      toast.success("Registration successful! Redirecting to Login...", {
-        position: "top-center",
-        autoClose: 2000,
-      });
+        // On successful registration, show toast
+        toast.success("Registration successful! Redirecting to Login...", {
+          position: "top-center",
+          autoClose: 2000,
+        });
 
-      // Redirect after 2 seconds
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+        // Redirect to login page after 2 seconds
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      } catch (error) {
+        // Show error message if registration fails
+        toast.error("Registration failed. Please try again.", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+      }
     },
   });
 
@@ -155,13 +171,49 @@ const Register = () => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  id="name"
-                  name="name"
-                  label="Full Name"
-                  value={formik.values.name}
+                  id="firstName"
+                  name="firstName"
+                  label="First Name"
+                  value={formik.values.firstName}
                   onChange={formik.handleChange}
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
+                  error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                  helperText={formik.touched.firstName && formik.errors.firstName}
+                  sx={{
+                    backgroundColor: "#ffffff20",
+                    borderRadius: "8px",
+                    input: { color: "#fff" },
+                    label: { color: "#ccc" },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  id="lastName"
+                  name="lastName"
+                  label="Last Name"
+                  value={formik.values.lastName}
+                  onChange={formik.handleChange}
+                  error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                  helperText={formik.touched.lastName && formik.errors.lastName}
+                  sx={{
+                    backgroundColor: "#ffffff20",
+                    borderRadius: "8px",
+                    input: { color: "#fff" },
+                    label: { color: "#ccc" },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  id="username"
+                  name="username"
+                  label="Username"
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  error={formik.touched.username && Boolean(formik.errors.username)}
+                  helperText={formik.touched.username && formik.errors.username}
                   sx={{
                     backgroundColor: "#ffffff20",
                     borderRadius: "8px",
