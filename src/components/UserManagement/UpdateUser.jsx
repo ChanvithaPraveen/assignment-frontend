@@ -5,7 +5,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import axios from "axios";
 
 const UpdateUser = () => {
-  const { id } = useParams(); // Get the user ID from the URL
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const [user, setUser] = useState({ firstName: "", lastName: "", username: "" });
   const [loading, setLoading] = useState(false);
@@ -46,7 +46,7 @@ const UpdateUser = () => {
         }
       );
       console.log(response.data);
-      navigate("/users"); // Redirect back to the users list page
+      navigate("/users"); 
     } catch (error) {
       console.error("Error updating user:", error);
     } finally {
@@ -58,32 +58,110 @@ const UpdateUser = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  const styles = {
+    container: {
+      height: "100vh",
+      width: "100vw",
+      display: "flex",
+      position: "relative",
+      background: "linear-gradient(135deg, #0f172a, #1e293b)",
+      overflow: "hidden",
+      flexDirection: "column", 
+      "@media (min-width: 600px)": {
+        flexDirection: "row", 
+      },
+    },
+    backgroundImage: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      opacity: 0.2,
+      zIndex: 1,
+    },
+    leftSection: {
+      flex: 1,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      padding: "3rem",
+      color: "#fff",
+      zIndex: 2,
+      textAlign: "center", 
+      "@media (min-width: 600px)": {
+        textAlign: "left", 
+      },
+    },
+    rightSection: {
+      flex: 1,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "3rem",
+      zIndex: 2,
+    },
+    formContainer: {
+      width: "100%",
+      maxWidth: 500,
+      backgroundColor: "rgba(255, 255, 255, 0.15)",
+      padding: "2rem",
+      borderRadius: "16px",
+      backdropFilter: "blur(10px)",
+      boxShadow: "0 8px 30px rgba(0, 0, 0, 0.6)",
+      "@media (max-width: 600px)": {
+        padding: "1.5rem", 
+      },
+    },
+    avatar: {
+      bgcolor: "#352b66",
+      width: 56,
+      height: 56,
+      margin: "0 auto",
+      boxShadow: "0 4px 10px rgba(37, 99, 235, 0.5)",
+    },
+    formTitle: {
+      color: "#fff",
+      fontWeight: "bold",
+      marginTop: "1rem",
+      fontSize: "1.5rem", 
+      "@media (min-width: 600px)": {
+        fontSize: "2rem", 
+      },
+    },
+    textField: {
+      backgroundColor: "#ffffff20",
+      borderRadius: "8px",
+      input: { color: "#fff" },
+      label: { color: "#ccc" },
+    },
+    submitButton: {
+      mt: 2,
+      backgroundColor: "#352b66",
+      color: "#fff",
+      padding: "0.7rem",
+      fontWeight: "bold",
+      "&:hover": { backgroundColor: "#392a85" },
+      "@media (max-width: 600px)": {
+        padding: "0.5rem", 
+      },
+    },
+  };
+
   return (
-    <Box
-      sx={{
-        height: "100vh",
-        width: "100vw",
-        display: "flex",
-        position: "relative",
-        background: "linear-gradient(135deg, #0f172a, #1e293b)",
-        overflow: "hidden",
-      }}
-    >
-      {/* Left Section - Optional content */}
+    <Box sx={styles.container}>
       <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          padding: "3rem",
-          color: "#fff",
-          zIndex: 2,
-        }}
-      >
+        component="img"
+        src="https://plus.unsplash.com/premium_photo-1684338795288-097525d127f0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZnVybml0dXJlfGVufDB8MHwwfHx8MA%3D%3D"
+        alt="Background"
+        sx={styles.backgroundImage}
+      />
+
+      <Box sx={styles.leftSection}>
         <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
-          Sitemark
+          Haulmatics
         </Typography>
         <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
           Adaptable performance
@@ -93,41 +171,13 @@ const UpdateUser = () => {
         </Typography>
       </Box>
 
-      {/* Right Section (Update User Form) */}
-      <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "3rem",
-          zIndex: 2,
-        }}
-      >
-        <Box
-          sx={{
-            width: "100%",
-            maxWidth: 500,
-            backgroundColor: "rgba(255, 255, 255, 0.15)",
-            padding: "2rem",
-            borderRadius: "16px",
-            backdropFilter: "blur(10px)",
-            boxShadow: "0 8px 30px rgba(0, 0, 0, 0.6)",
-          }}
-        >
+      <Box sx={styles.rightSection}>
+        <Box sx={styles.formContainer}>
           <Box sx={{ textAlign: "center", marginBottom: "1.5rem" }}>
-            <Avatar
-              sx={{
-                bgcolor: "#352b66",
-                width: 56,
-                height: 56,
-                margin: "0 auto",
-                boxShadow: "0 4px 10px rgba(37, 99, 235, 0.5)",
-              }}
-            >
+            <Avatar sx={styles.avatar}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography variant="h5" sx={{ color: "#fff", fontWeight: "bold", mt: 1 }}>
+            <Typography variant="h5" sx={styles.formTitle}>
               Update User
             </Typography>
           </Box>
@@ -142,12 +192,7 @@ const UpdateUser = () => {
                   label="First Name"
                   value={user.firstName}
                   onChange={handleChange}
-                  sx={{
-                    backgroundColor: "#ffffff20",
-                    borderRadius: "8px",
-                    input: { color: "#fff" },
-                    label: { color: "#ccc" },
-                  }}
+                  sx={styles.textField}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -158,12 +203,7 @@ const UpdateUser = () => {
                   label="Last Name"
                   value={user.lastName}
                   onChange={handleChange}
-                  sx={{
-                    backgroundColor: "#ffffff20",
-                    borderRadius: "8px",
-                    input: { color: "#fff" },
-                    label: { color: "#ccc" },
-                  }}
+                  sx={styles.textField}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -174,12 +214,7 @@ const UpdateUser = () => {
                   label="Username"
                   value={user.username}
                   onChange={handleChange}
-                  sx={{
-                    backgroundColor: "#ffffff20",
-                    borderRadius: "8px",
-                    input: { color: "#fff" },
-                    label: { color: "#ccc" },
-                  }}
+                  sx={styles.textField}
                 />
               </Grid>
             </Grid>
@@ -188,20 +223,11 @@ const UpdateUser = () => {
               fullWidth
               variant="contained"
               type="submit"
-              sx={{
-                mt: 2,
-                backgroundColor: "#352b66",
-                color: "#fff",
-                padding: "0.7rem",
-                fontWeight: "bold",
-                "&:hover": { backgroundColor: "#392a85" },
-              }}
+              sx={styles.submitButton}
               disabled={loading}
             >
               {loading ? "Updating..." : "Update"}
             </Button>
-
-            <Divider sx={{ my: 2, backgroundColor: "#ffffff30" }}>or</Divider>
           </Box>
         </Box>
       </Box>
