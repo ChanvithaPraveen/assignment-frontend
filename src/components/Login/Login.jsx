@@ -119,35 +119,41 @@ const Login = () => {
       password: Yup.string().required('Required'),
     }),
     onSubmit: async (values) => {
-      try {
-        // Make the API call to the backend to authenticate the user
-        const response = await axios.post('http://localhost:5000/api/users/login', {
-          username: values.username,
-          password: values.password,
-        });
-
-        // On success, store the JWT token in localStorage
-        const { token } = response.data;
-        localStorage.setItem('token', token);
-
-        // Dispatch the login action to update the state (if necessary)
-        dispatch(login({ token }));
-
-        // Show success message
-        toast.success('Login successful!');
-
-        // Redirect to the home page
-        navigate('/home');
-      } catch (error) {
-        // Show error message if login fails
-        toast.error('Login failed. Please check your credentials and try again.');
-      }
-    },
+        try {
+          // Make the API call to the backend to authenticate the user
+          const response = await axios.post('http://localhost:5000/api/users/login', {
+            username: values.username,
+            password: values.password,
+          });
+      
+          // Extract token and user data from the response
+          const { token, user } = response.data;
+      
+          // Store token and user data in localStorage
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(user)); // Convert user data to a JSON string
+      
+          // Dispatch the login action to update the state (if necessary)
+          dispatch(login({ token, user }));
+      
+          // Show success message
+          toast.success('Login successful!');
+          
+          // Redirect to home page after 2 seconds
+        setTimeout(() => {
+            navigate("/home");
+        }, 2000);
+        } catch (error) {
+          // Show error message if login fails
+          toast.error('Login failed. Please check your credentials and try again.');
+        }
+      },      
   });
 
   return (
     <Box sx={styles.container}>
-      <Box component="img" src="https://via.placeholder.com/1920x1080" alt="Background" sx={styles.backgroundImage} />
+      <Box component="img" src="https://plus.unsplash.com/premium_photo-1684338795288-097525d127f0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZnVybml0dXJlfGVufDB8MHwwfHx8MA%3D%3D"
+        alt="Background" sx={styles.backgroundImage} />
       
       <Box sx={styles.leftSection}>
         <Box>
