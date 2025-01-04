@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { login } from '../../features/authSlice';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';  // Import axios for making the API call
 import {
   Avatar,
   Box,
@@ -117,10 +118,30 @@ const Login = () => {
       username: Yup.string().required('Required'),
       password: Yup.string().required('Required'),
     }),
-    onSubmit: (values) => {
-      dispatch(login(values));
-      toast.success('Login successful!');
-      navigate('/home');
+    onSubmit: async (values) => {
+      try {
+        // Make the API call to the backend to authenticate the user
+        const response = await axios.post('http://localhost:5000/api/users/login', {
+          username: values.username,
+          password: values.password,
+        });
+
+        // On success, store the JWT token in localStorage
+        const { token } = response.data;
+        localStorage.setItem('token', token);
+
+        // Dispatch the login action to update the state (if necessary)
+        dispatch(login({ token }));
+
+        // Show success message
+        toast.success('Login successful!');
+
+        // Redirect to the home page
+        navigate('/home');
+      } catch (error) {
+        // Show error message if login fails
+        toast.error('Login failed. Please check your credentials and try again.');
+      }
     },
   });
 
