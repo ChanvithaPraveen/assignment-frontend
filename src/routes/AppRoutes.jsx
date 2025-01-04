@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Login from '../components/Login/Login';
 import Register from '../components/Register/Register';
 import Home from '../components/Home/Home';
+import UserManagement from '../components/UserManagement/UserManagement';
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/user-management" element={<UserManagement />} />
       </Routes>
     </Router>
   );
