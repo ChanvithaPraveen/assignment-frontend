@@ -1,18 +1,17 @@
-import { useState } from 'react'
-import './App.css'
-import AppRoutes from './routes/AppRoutes'
+import React from 'react';
 import { Provider } from 'react-redux';
-import store from './store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './store';
+import AppRoutes from './routes/AppRoutes';
 
-function App() {
-
+const App = () => {
   return (
-    <>
-      <Provider store={store}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
         <AppRoutes />
-      </Provider>
-    </>
-  )
-}
+      </PersistGate>
+    </Provider>
+  );
+};
 
-export default App
+export default App;
