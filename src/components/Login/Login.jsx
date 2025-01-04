@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { login } from '../../features/authSlice';
@@ -119,36 +119,70 @@ const Login = () => {
       password: Yup.string().required('Required'),
     }),
     onSubmit: async (values) => {
-        try {
-          // Make the API call to the backend to authenticate the user
-          const response = await axios.post('http://localhost:5000/api/users/login', {
-            username: values.username,
-            password: values.password,
-          });
-      
-          // Extract token and user data from the response
-          const { token, user } = response.data;
-      
-          // Store token and user data in localStorage
-          localStorage.setItem('token', token);
-          localStorage.setItem('user', JSON.stringify(user)); // Convert user data to a JSON string
-      
-          // Dispatch the login action to update the state (if necessary)
-          dispatch(login({ token, user }));
-      
-          // Show success message
-          toast.success('Login successful!');
-          
-          // Redirect to home page after 2 seconds
-        setTimeout(() => {
-            navigate("/home");
-        }, 2000);
-        } catch (error) {
-          // Show error message if login fails
-          toast.error('Login failed. Please check your credentials and try again.');
+        // First check if the username and password are for the specific user (haulmatic)
+        if (values.username === 'haulmatic' && values.password === '123456') {
+            try {
+                const response = await axios.post('http://localhost:5000/api/users/login', {
+                    username: values.username,
+                    password: values.password,
+                });
+    
+                const { token, user } = response.data;
+    
+                if (token && user) {
+                    // Save the token and user to localStorage
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('user', JSON.stringify(user));
+    
+                    // Dispatch login state update
+                    dispatch(login({ token, user }));
+    
+                    // Redirect to user management page
+                    navigate('/user-management');
+                    toast.success('Login successful!');
+                } else {
+                    // If there's no token or user data, show an error
+                    toast.error('Invalid username or password. Please try again.');
+                }
+            } catch (error) {
+                // Handle errors for the haulmatic login attempt
+                console.error('Login failed', error);
+                toast.error('Login failed. Please check your credentials and try again.');
+            }
+        } else {
+            try {
+                // Make the API call to the backend to authenticate the user
+                const response = await axios.post('http://localhost:5000/api/users/login', {
+                    username: values.username,
+                    password: values.password,
+                });
+    
+                // Extract token and user data from the response
+                const { token, user } = response.data;
+    
+                if (token && user) {
+                    // Store token and user data in localStorage
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('user', JSON.stringify(user)); // Convert user data to a JSON string
+    
+                    // Dispatch the login action to update the state (if necessary)
+                    dispatch(login({ token, user }));
+    
+                    // Redirect to home page after successful login
+                    navigate('/home');
+                    toast.success('Login successful!');
+                } else {
+                    // If there's no token or user data, show an error
+                    toast.error('Invalid username or password. Please try again.');
+                }
+            } catch (error) {
+                // Show error message if the login request fails
+                console.error('Login failed', error);
+                toast.error('Login failed. Please check your credentials and try again.');
+            }
         }
-      },      
-  });
+    }
+  });    
 
   return (
     <Box sx={styles.container}>
@@ -201,7 +235,12 @@ const Login = () => {
             <Button fullWidth variant="contained" type="submit" sx={styles.submitButton}>Sign in</Button>
 
             <Divider sx={styles.divider}>or</Divider>
-            {/* Optional Social login buttons */}
+            <Typography align="center" sx={{ color: "#ccc", mt: 2 }}>
+              Don't have an account?{" "}
+              <Link href="/register" sx={{ color: "#fff", textDecoration: "underline" }}>
+                Register
+              </Link>
+            </Typography>
           </Box>
         </Box>
       </Box>

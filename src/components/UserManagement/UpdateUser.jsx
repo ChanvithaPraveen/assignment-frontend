@@ -69,6 +69,23 @@ const UpdateUser = () => {
         overflow: "hidden",
       }}
     >
+      {/* Background Image */}
+      <Box
+        component="img"
+        src="https://plus.unsplash.com/premium_photo-1684338795288-097525d127f0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZnVybml0dXJlfGVufDB8MHwwfHx8MA%3D%3D"
+        alt="Background"
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          opacity: 0.2,
+          zIndex: 1,
+        }}
+      />
+
       {/* Left Section - Optional content */}
       <Box
         sx={{
@@ -200,8 +217,6 @@ const UpdateUser = () => {
             >
               {loading ? "Updating..." : "Update"}
             </Button>
-
-            <Divider sx={{ my: 2, backgroundColor: "#ffffff30" }}>or</Divider>
           </Box>
         </Box>
       </Box>
