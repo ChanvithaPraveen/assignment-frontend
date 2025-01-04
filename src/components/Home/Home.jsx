@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { logout } from '../../features/authSlice';
 import { Box, Typography, Button, Avatar } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
@@ -50,26 +50,44 @@ const styles = {
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const [user, setUser] = useState(null);
 
-  if (!isAuthenticated) {
+  useEffect(() => {
+    // Fetch user data from localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    // Clear localStorage and dispatch logout action
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    dispatch(logout());
     navigate('/');
-  }
+  };
 
   return (
     <Box sx={styles.container}>
       <Avatar sx={styles.avatar}>
         <PersonIcon sx={{ fontSize: 50 }} />
       </Avatar>
-      <Typography variant="h4" sx={styles.welcomeText}>
-        Welcome, {user?.firstname} {user?.lastname}!
-      </Typography>
-      <Typography sx={styles.profileText}>
-        This is your profile. Explore and enjoy your personalized dashboard.
-      </Typography>
+      {user && (
+        <>
+          <Typography variant="h4" sx={styles.welcomeText}>
+            Welcome, {user.firstName} {user.lastName}!
+          </Typography>
+          <Typography sx={styles.profileText}>
+            This is your profile. Explore and enjoy your personalized dashboard.
+          </Typography>
+        </>
+      )}
       <Button
         variant="contained"
-        onClick={() => dispatch(logout())}
+        onClick={handleLogout}
         sx={styles.logoutButton}
       >
         Logout
